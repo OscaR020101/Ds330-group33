@@ -91,8 +91,4 @@ def train_models():
     # print(f"Average negative sentiment score = {avg_neg}\nAverage positive sentiment score = {avg_pos}")
 
 if __name__ == '__main__':
-    args = sys.argv[1:]
-    if len(args) == 0:
-        print("missing command line arguments, check README")
-    else:
-        main(args)
+    train_models()
