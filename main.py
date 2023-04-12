@@ -6,6 +6,8 @@ import re
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+from sklearn.ensemble import RandomForestClassifier
+
 
 from models.lstm import Lstm
 from models.gru import Gru
@@ -33,11 +35,15 @@ def predict():
 
 def train_models():
     # read data
-    df = pd.read_csv("apis/tweet_data.csv")
+    df = pd.read_csv("apis/News_Yahoo_stock.csv")
+    # cut data in 5000 row
+    df = df.iloc[5000:7000]
 
     # sample data
     df = df.sample(frac=1).reset_index(drop=True)
-
+    #Combine Title and content
+    df['Text'] = df['title']
+    df['Sentiment'] = df['label']
     # clean tweet text
     df['Text'] = df['Text'].apply(lambda x: x.lower())  # transform text to lowercase
     df['Text'] = df['Text'].apply(lambda x: re.sub('[^a-zA-z0-9\s]', '', x))
@@ -54,8 +60,10 @@ def train_models():
     y = pd.get_dummies(df['Sentiment']).values
     [print(df['Sentiment'][i], y[i]) for i in range(0, 5)]
 
-    # split data into sample and
+    # split data into train and test
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    #RANDOM FOREAST TRAINING
 
 
     # LSTM MODEL TRAINING
@@ -71,6 +79,9 @@ def train_models():
     # make predictions on test data
     predictions = lstm.predict(X_test)
     # determine accuracy of predictions
+    avg_neg = np.mean([prediction[0] for prediction in predictions])
+    avg_pos = np.mean([prediction[1] for prediction in predictions])
+    print(f"LSTM model: \nAverage negative sentiment score = {avg_neg}\nAverage positive sentiment score = {avg_pos}")
 
     # GRU MODEL TRAINING
     gru = Gru()
@@ -84,11 +95,9 @@ def train_models():
     # make predictions on test data
     predictions = gru.predict(X_test)
     # determine accuracy of predicionts
-
-    # # plot average predictions
-    # avg_neg = np.mean([prediction[0] for prediction in predictions])
-    # avg_pos = np.mean([prediction[1] for prediction in predictions])
-    # print(f"Average negative sentiment score = {avg_neg}\nAverage positive sentiment score = {avg_pos}")
+    avg_neg = np.mean([prediction[0] for prediction in predictions])
+    avg_pos = np.mean([prediction[1] for prediction in predictions])
+    print(f"GRU model: \nAverage negative sentiment score = {avg_neg}\nAverage positive sentiment score = {avg_pos}")
 
 if __name__ == '__main__':
     train_models()
