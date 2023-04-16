@@ -1,11 +1,8 @@
 # Stock Sentiment Analysis
 
-#### Bryce Woods and Nicholas LaMonica
+#### Jiaqi Liu & Jingxuan Wang
 
-A stock sentiment analysis program that attempts
-to predict the movements of stocks based on the prevailing sentiment from social media websites (twitter, reddit and stocktwits).  
-Each Tweet will be given a bullish, neutral, or bearish sentiment. Every Tweet's sentiment within a certain time 
-period will be averaged to give the stocks total sentiment for that time period.
+Our project is about stock trend prediction using sentiment analysis. In this code file, we implemented four supervised machine learning algorithms, Random Forest, Support Vector Machine, Long Short-Term Memory, and Gated Recurrent Unit. Our performance evaluation is based on a confusion matrix.
 
 ## Directions to Run
 
